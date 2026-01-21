@@ -1,0 +1,25 @@
+import { redirect } from "react-router-dom";
+import { deleteContact, getContact, getContacts } from "../contacts";
+
+export async function getContactsloader({ request }) {
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const contacts = await getContacts(q);
+  return { contacts, q }; 
+}
+
+export async function getContactLoader({ params }) {
+  const contact = await getContact(params.contactId);
+  if (!contact) {
+    throw new Response("", {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }
+  return { contact };
+}
+
+export async function deleteContactAction({ params }) {
+  await deleteContact(params.contactId);
+  return redirect("/");
+}

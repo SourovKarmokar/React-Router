@@ -1,0 +1,83 @@
+
+import { useEffect } from "react";
+import { Form, useLoaderData , useNavigate , useSubmit } from "react-router-dom";
+
+export default function EditContact() {
+  const { contact , q  } = useLoaderData();
+  const navigate = useNavigate()
+
+  const submit = useSubmit()
+
+
+  useEffect(() => {
+  document.getElementById("q").value = q;
+}, [q]);
+
+
+const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has(
+      "q"
+    );
+
+
+  return (
+    <Form method="post" id="contact-form">
+      <p>
+        <span>Name</span>
+        <input
+          placeholder="First"
+          aria-label="First name"
+          type="text"
+          name="first"
+          defaultValue={contact?.first}
+        />
+        <input
+          placeholder="Last"
+          aria-label="Last name"
+          type="text"
+          name="last"
+          defaultValue={contact?.last}
+          className={searching ? "loading" : ""}
+        />
+        <div
+              id="search-spinner"
+              aria-hidden
+              hidden={!searching}
+            />
+      </p>
+      <label>
+        <span>Twitter</span>
+        <input
+          type="text"
+          name="twitter"
+          placeholder="@jack"
+          defaultValue={contact?.twitter}
+          onChange={(e) => submit(e.currentTarget.form)}
+        />
+      </label>
+      <label>
+        <span>Avatar URL</span>
+        <input
+          placeholder="https://example.com/avatar.jpg"
+          aria-label="Avatar URL"
+          type="text"
+          name="avatar"
+          defaultValue={contact?.avatar}
+        />
+      </label>
+      <label>
+        <span>Notes</span>
+        <textarea
+          name="notes"
+          defaultValue={contact?.notes}
+          rows={6}
+        />
+      </label>
+      <p>
+        <button type="submit">Save</button>
+        <button type="button" onClick={() => navigate(-1)}>Cancel</button>
+      </p>
+    </Form>
+  );
+}
